@@ -13,7 +13,7 @@ jobs:
     defaults:
      run:
       # We keep Terraform files in the terraform directory.
-        working-directory: ./Terraform/VM
+        working-directory: examples/complete
 
     steps:
     - name: Checkout
@@ -25,7 +25,7 @@ jobs:
     # AWS Region, e.g. us-east-2
        aws-region: us-east-2
        aws-access-key-id: ${{ secrets.aws_access_key }}
-       aws-secret-access-key: ${{ aws_secret_access_key }}
+       aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
     
    # Setups the Terraform with required Version        
     - name: Setup Terraform
@@ -36,17 +36,17 @@ jobs:
     # initializes a working directory  
     - name: Terraform Init
       run: terraform init  
-      working-directory: ./Terraform/VM
+      # working-directory: ./Terraform/VM
       
     # validate the syntax  
     - name: Terraform Validate
       run: terraform validate 
-      working-directory: ./Terraform/VM
+      # working-directory: ./Terraform/VM
       
     # preview the changes in Configuration files   
     - name: Terraform Plan
       run: terraform plan 
-      working-directory: ./Terraform/VM
+      # working-directory: ./Terraform/VM
       
     - run: terraform apply -auto-approve 
-      working-directory: ./Terraform/VM
+      # working-directory: ./Terraform/VM
