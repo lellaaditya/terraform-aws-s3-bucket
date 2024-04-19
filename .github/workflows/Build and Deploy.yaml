@@ -1,0 +1,52 @@
+# File: .github/workflows/workflow.yml
+
+on: [workflow_dispatch]
+
+name: Run Aws S3 Bucket
+
+permissions:
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+     run:
+      # We keep Terraform files in the terraform directory.
+        working-directory: ./Terraform/VM
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: "Configure AWS Credentials" 
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+    # AWS Region, e.g. us-east-2
+       aws-region: us-east-2
+       aws-access-key-id: ${{ secrets.aws_access_key }}
+       aws-secret-access-key: ${{ aws_secret_access_key }}
+    
+   # Setups the Terraform with required Version        
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.4.2
+        
+    # initializes a working directory  
+    - name: Terraform Init
+      run: terraform init  
+      working-directory: ./Terraform/VM
+      
+    # validate the syntax  
+    - name: Terraform Validate
+      run: terraform validate 
+      working-directory: ./Terraform/VM
+      
+    # preview the changes in Configuration files   
+    - name: Terraform Plan
+      run: terraform plan 
+      working-directory: ./Terraform/VM
+      
+    - run: terraform apply -auto-approve 
+      working-directory: ./Terraform/VM
