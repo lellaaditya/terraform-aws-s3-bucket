@@ -6,7 +6,8 @@ name: Run Aws S3 Bucket
 
 permissions:
   id-token: write
-
+  contents: read
+  
 jobs:
   build:
     runs-on: ubuntu-latest
